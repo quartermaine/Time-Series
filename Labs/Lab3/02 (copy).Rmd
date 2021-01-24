@@ -1,0 +1,62 @@
+# `r Chapter02`
+
+\lipsum[2-4]
+
+## Subtitle
+
+\begin{wrapfigure}{r}{0.3\textwidth}
+\centering
+\includegraphics[width=0.3\textwidth]{images/pepe.png}
+\vspace{-10pt}
+\caption{Basic layout}
+\end{wrapfigure}
+
+\lipsum[2-6]
+
+```{#numCode .R .numberLines}
+expo<-function(x){
+  return(x^5*exp(-x)/120)}
+f.MCMC.MHoo<-function(nstep,X0,props){
+  vN<-1:nstep
+  vX<-rep(X0,nstep);
+  for (i in 2:nstep){
+    X<-vX[i-1]
+    Y<-rlnorm(1, meanlog = log(X), sdlog = props) 
+    u<-runif(1)
+    a<-min(c(1,(expo(Y)*dlnorm(X,meanlog = log(X),sdlog=props))/
+               (expo(X)*dlnorm(Y,meanlog =log(X),sdlog=props))))
+    if (u <=a){vX[i]<-Y}else{vX[i]<-X}
+  }
+  return(cbind(vN,vX))}
+plot01 <-f.MCMC.MHoo(2000,50,1) # this is a comment
+# this is a comment
+```
+
+```{r, echo = FALSE, purl = TRUE, eval = FALSE}
+expo<-function(x){
+  return(x^5*exp(-x)/120)}
+f.MCMC.MHoo<-function(nstep,X0,props){
+  vN<-1:nstep
+  vX<-rep(X0,nstep);
+  for (i in 2:nstep){
+    X<-vX[i-1]
+    Y<-rlnorm(1, meanlog = log(X), sdlog = props) 
+    u<-runif(1)
+    a<-min(c(1,(expo(Y)*dlnorm(X,meanlog = log(X),sdlog=props))/
+               (expo(X)*dlnorm(Y,meanlog =log(X),sdlog=props))))
+    if (u <=a){vX[i]<-Y}else{vX[i]<-X}
+  }
+  return(cbind(vN,vX))}
+plot01 <-f.MCMC.MHoo(2000,50,1)
+Print("this is 02.rmd") # this is a comment
+# this is a comment
+```
+
+## Subtitle
+
+\lipsum[1-5]
+
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Metropolis-Hastings sampled Lognormal distribution vs Chi-squared distribution.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plot01.png", "images/plot02.png"))
+```

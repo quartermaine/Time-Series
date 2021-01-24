@@ -1,0 +1,522 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+Assignment 1
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+a ) 
+\end_layout
+
+\begin_layout Standard
+The partial autocorrelation is the association between 
+\begin_inset Formula $X_{t}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{t+k}$
+\end_inset
+
+ with the linear dependence of 
+\begin_inset Formula $X_{t+1}$
+\end_inset
+
+ through 1
+\begin_inset Formula $X_{t+k-1}$
+\end_inset
+
+ removed.Given by the formula :
+\end_layout
+
+\begin_layout Standard
+pacf(
+\begin_inset Formula $X_{t}$
+\end_inset
+
+,
+\begin_inset Formula $X_{t+k}$
+\end_inset
+
+)=Corr(
+\begin_inset Formula $X_{t},X_{t+k}|X_{t+1}=x_{t+1,...,}X_{t+k+1}=x_{t+k+1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The results we obtain are similar calucating the corellation with linear
+ regression between 
+\begin_inset Formula $X_{t}\sim X_{t-1}+X_{t-2}$
+\end_inset
+
+ and 
+\begin_inset Formula $X_{t-3}\sim X_{t-1}+X_{t-2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+b )
+\end_layout
+
+\begin_layout Standard
+As we can see the value of the φ
+\begin_inset Formula $_{2}=0.1$
+\end_inset
+
+doesn't fall between the confidence interval for ML estimate
+\end_layout
+
+\begin_layout Standard
+c )
+\end_layout
+
+\begin_layout Standard
+Do you have anything for this? We can see the seasonality form the acf plot
+ and the pacf
+\end_layout
+
+\begin_layout Standard
+d)
+\end_layout
+
+\begin_layout Standard
+As we can see comparing the plots using the ARIMA(0,0,1)x(0,0,1)
+\begin_inset Formula $_{12}$
+\end_inset
+
+we fitted and the results from the kernelab the ARIMA(0,0,1)x(0,0,1)
+\begin_inset Formula $_{12}$
+\end_inset
+
+ was able to produce better predictions compared to kernelab.
+\end_layout
+
+\begin_layout Standard
+This result may be explained due to the fact that kernelab wasn't able to
+ capture the seasonality or trend because the prediction is based on the
+ width of the kernel and might some previous values not include in the kernel
+ estimate.Also the gaussian kernel which is symmetric returns the most probable
+ prediction (or mean prediction).
+\end_layout
+
+\begin_layout Standard
+e)
+\end_layout
+
+\begin_layout Standard
+How many outside the band?—> see the code that returns the result.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+Assignment 2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="2cm">
+<column alignment="center" valignment="top" width="2cm">
+<column alignment="center" valignment="top" width="2cm">
+<column alignment="center" valignment="top" width="2cm">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+chicken
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+diff(chicken)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+so2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+diff(so2)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+slow decay differencing needed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Seasonal cycle pattern present
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Fast decay but difference needed
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after lag 0.02
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Seasonal pattern present
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cut off after lag 1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off quickly
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 0.18
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="3" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="2cm">
+<column alignment="center" valignment="top" width="2cm">
+<column alignment="center" valignment="top" width="2cm">
+<column alignment="center" valignment="top" width="2cm">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+EQcount
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+diff(EQcount)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+HCT
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+diff(HCT)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 7 lag
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 1 lag
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 18 lag
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Slow decay tails off after 1 lag
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+The bars are in the borders
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 1 lag
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 7 lag
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tails off after 5 lag
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For the chicken data 
+\end_layout
+
+\begin_layout Standard
+For the nonseasonal part we can suggest an AR(2) from ACF-PACF and for the
+ seasonal s=12 an MA(1) 
+\end_layout
+
+\begin_layout Standard
+The final model is a SARIMA(2,1,0)x(1,0,0)
+\begin_inset Formula $_{12}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+For the so2 data 
+\end_layout
+
+\begin_layout Standard
+It's very hard to distinguiss a model but maybe and ARMA(1,1,1) according
+ to ACF-PACF plots of difference.
+\end_layout
+
+\begin_layout Itemize
+For the EQcount
+\end_layout
+
+\begin_layout Standard
+From AFC of EQcount difference is needed and according to ACF of difference
+ and MA(1).
+\end_layout
+
+\begin_layout Standard
+The final model is ARIMA(0,1,1)
+\end_layout
+
+\begin_layout Itemize
+For the HCT
+\end_layout
+
+\begin_layout Standard
+According to ACF of HCT difference is needed.From PACF of difference we can
+ suggest an AR(5) and form ACF an MA(1).
+\end_layout
+
+\begin_layout Standard
+The final model is ARIMA(5,1,1)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_body
+\end_document

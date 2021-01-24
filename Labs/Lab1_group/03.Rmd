@@ -1,0 +1,136 @@
+# `r Chapter03`
+
+Weekly time series *oil* and *gas* present in the package *astsa* show the oil prices in dollars per barrel and gas prices in cents per dollar.
+
+## A)
+
+Plot the given time series in the same graph. Do they look like stationary series? Do the processes seem to be related to each other? Motivate your answer.
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+col3<-sample(pal,1) ; col4<-sample(pal,1)
+
+# png(filename="images/plotts08.png", width = 750, height = 500)
+# plot.ts(gas,col=col3,lwd=2,main="Time series of oil and gas",
+#         panel.first=grid(25,25),ylim=c(0,350))
+# lines(oil,col=col4,lwd=2,
+#       panel.first=grid(25,25))
+# legend(2000,350, legend=c("gas", "oil"),
+#        col=c(col3, col4), lty=1, cex=0.8,
+#        title="TS types", text.font=4, bg='white',
+#        lwd=2)
+# dev.off()
+```
+
+
+Figure 8 (left plot) shows what we would describe visually as something that is not a stationary series.
+
+
+## B)
+
+Apply log-transform to the time series and plot the transformed data. In what respect did this transformation made the data easier for the analysis?
+
+Figure 8 (right) does shows that the applied transformation made the data  easier at least for visual analisys. This is thanks to the 2d reduction that a log transformation brings to greater numbers hen compared to relative small ones, allowing a clearer comparison loosing less detail of the smaller movements in the TS. 
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+logOil<-log(oil) ; logGas<-log(gas)
+
+# png(filename="images/plotts09.png", width = 750, height = 500)
+# plot.ts(logGas,col=col3,lwd=2,main="Time series of log(oil) and log(gas)",
+#         panel.first=grid(25,25),ylim=c(0,6))
+# lines(logOil,col=col4,lwd=2,
+#       panel.first=grid(25,25))
+# legend(2000,2, legend=c("log(gas)", "log(oil)"),
+#        col=c(col3, col4), lty=1, cex=0.8,
+#        title="TS types", text.font=4, bg='white',
+#        lwd=2)
+# dev.off()
+```
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Time series before (to the left) and after (to the right) the agumentation of a log-transformation.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts08.png", "images/plotts09.png"))
+```
+
+\newpage
+
+## C)
+
+To eliminate trend, compute the first difference of the transformed data, plot the detrended series, check their ACFs and analyce the obtained plots. Denote the data obtained here as $x_t$ (oil) and $y_t$ (gas).
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+x_t<-diff(log(oil)) ; y_t<-diff(log(gas))
+col5<-sample(pal,1) ; col6<-"#A6CEE3"
+
+# png(filename="images/plotts10.png", width = 750, height = 500)
+# par(mfrow=c(1,2))
+# plot.ts(x_t, main="First difference Oil",
+#         col=col5,panel.first=grid(25,25),lwd=2)
+# plot.ts(y_t,col=col6,main="First difference Gas",
+#         panel.first=grid(25,25),lwd=2)
+# dev.off()
+# 
+# png(filename="images/plotts11.png", width = 750, height = 500)
+# par(mfrow=c(1,2))
+# acf(x_t,main="ACF Oil",col=sample(pal,1),panel.first=grid(25,25))
+# acf(y_t,main="ACF Gas",col=sample(pal,1),panel.first=grid(25,25))
+# dev.off()
+```
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Time series analysis of Oil and Gas First difference and ACF respectively.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts10.png", "images/plotts11.png"))
+```
+
+
+## D)
+
+Exhibit scatterplots of $x_t$ and $y_t$ for up to three weeks of lead  time of $x_t$; include a nonparametric smoother in each plot and comment the results: are there putliers? Are the relationships linear? Are there changes in the trend?
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+foo = expression("y"[t]*"~x"[t],"y"[t]*"~x"[t-1],
+                 "y"[t]*"~x"[t-2],"y"[t]*"~x"[t-3])
+
+# png(filename="images/plotts12.png", width = 2000*.75, height = 750*.75)
+# par(mfrow=c(2,2))
+# for(i in 1:4){
+#   plot(y_t,lag(x_t,i),main=bquote("Scatterplot of"~.(foo[[i]])),
+#        col=sample(pal,1),panel.first=grid(25,25),pch=18)
+#   lines(lowess(y_t, lag(x_t, i)),lwd=2)
+# }
+# dev.off()
+```
+
+Figure 10 does show an slight decrease of the linear relationship as the lead increases.
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="100%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Time series analysis scatterplot with 0-3 weeks of lead time.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts12.png"))
+```
+
+\newpage
+
+## E)
+
+Fit the following model: $y_t=\alpha_0+\alpha_1I(x_t>0)+\beta_1x_t+\beta_2x_{t-1}+w_t$ and check which coefficients seem to be significant. How can this be interpretted? Analyze the residual pattern and the ACF of the residuals.
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+dummy=ifelse(x_t>0,0,1)
+D<-ts.intersect(y_t,dL1=lag(x_t),x_t,dL2=lag(x_t,2),dframe=T)
+# summary(fit<-lm(y_t~dL1+x_t+dL2,data=D,na.action=NULL))
+
+p_values<-summary(fit)$coefficients[,4]
+p_values<0.05
+
+# plot(fit)
+# png(filename="images/plotts13.png", width = 1500, height = 500)
+# par(mfrow=c(1,2))
+# plot.ts(fit$residuals,main="Plot of the residuals",
+#         col=sample(pal,1),panel.first=grid(25,25),ylab="Residuals",lwd=2)
+# acf(fit$residuals,main="ACF of REsiduals",col=sample(pal,1),
+#     panel.first=grid(25,25))
+# dev.off()
+```
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="100%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Time series analysis scatterplot with 0-3 weeks of lead time.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts13.png"))
+```

@@ -1,0 +1,7 @@
+# Appendix
+
+## Code
+### Code used for `r Chapter02`
+
+```{r, class.source = c("numCode", "R", "numberLines"), code =  readLines(knitr::purl("~/Courses/Time Series/Labs/Lab3/02.Rmd",documentation=1)), comment = NA, echo=TRUE, eval=FALSE, tidy=TRUE, tidy.opts = list(blank = FALSE, width.cutoff = 55), }
+```

@@ -1,0 +1,169 @@
+# `r Chapter02`
+
+The dataset **Rhine.csv** contains monthly concentrations of total nitrogen in the Rhine River in the period 1989-2002.
+
+## A)
+
+Import the data to R, convert it appropriately to *ts* object (use function `ts()`) and explore it by plotting the time series, creating scatterplots of $x_t$ against $x_{t-1},...x_{t-12}$. Analyze the time series plot and scatter plots: Are there any trends, linear or seasonal, in the time series? When suring the year is the concentration highest? Are there any special patters in the data or scatterplots? Does the variance seem to change over time? Which variables in the scatterplots seem to have a significant relation to each other?
+
+
+\begin{wrapfigure}{r}{0.5\textwidth}
+\centering
+\includegraphics[width=0.5\textwidth]{images/plotts01.png}
+\vspace{-20pt}
+\caption{Time series plot}
+\end{wrapfigure}
+
+Figure 3 shows the ploted data as a time series giving a sence of having a descending trend and also s possible sence of peiodicity. As instructed in this lab, by using  the scatterplots ith lag, we can see in the begining as lag 1 that there is a significant level of correlation.
+
+  This in itself, is a signal that indeed there is a semblance of seasonality to the data with that lag. As e move long the Scatterplot in fugure 4 both left and right, it shows that ahen compared ith lag 5 or 6 the correlation is almost non existant, but then again, proving its periodicity as e move further in the lag upt to 12 then again e can see a high correlation of the data with itself, thus proving its seasonality.
+  
+  Is also worth to mention that this seasonality seems to appear yearly, given the lag being 1 and 12 as well as the meaning of the unit being 1 month.
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE, warning=FALSE, message=FALSE}
+library(astsa)
+rhine<-read.csv2("data/Rhine.csv",sep=";")
+rhine_ts<-ts(rhine[,4],start=c(rhine[1,1],1),end=c(2002,12),frequency=12)
+```
+
+
+```{r, eval=FALSE,echo = FALSE, warning=FALSE, purl = FALSE, out.hight="100%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Ploted data as a time series plot.}", out.extra='angle= 0', message=FALSE}
+png(filename="images/plotts01.png", width = 750, height = 500)
+plot.ts(rhine_ts,col=sample(pal,1),main="Rhine River TS",
+        lwd=2,panel.first=grid(25,25))
+dev.off()
+```
+
+\vspace{20pt}
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Ploted data as a time series plot with lag1()  left  and lag() right.}", out.extra='angle= 0', message=FALSE}
+
+lag1.plot(rhine_ts,12)
+lag.plot(rhine_ts,12)
+```
+
+\newpage
+
+## B)
+
+Eliminate the trend by fitting a linear model with respect to t to the time series is there a significant time trend? Look at the residual pattern and the sample AFC of the residuals and comment on this pattern might be related to the seasonality series.
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+fit<-lm(rhine_ts~time(rhine_ts),na.action = NULL)
+
+# summary(fit)
+
+col3<-sample(pal,1) ; col4<-sample(pal,1)
+```
+
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Analisys of the TS with a fitted LR at the left and its residuals analisys..}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts02.png", "images/plotts03.png"))
+```
+
+```{r, echo = FALSE, purl = TRUE, eval = FALSE, message=FALSE}
+plot.ts(rhine_ts,col=col3,
+        main="TS with fitted LR",panel.first=grid(25,25),lwd=2)
+abline(fit,col=col4,lwd=2)
+legend(130,7, legend=c("TS Rhine", "LR"),
+       col=c(col3, col4), lty=1, cex=0.8,
+       text.font=4, bg='white',lwd=2)
+
+par(mfrow=c(1,2))
+plot(residuals(fit),main="Detrended Rhine\n with LR",col=sample(pal,1),
+     panel.first=grid(15,25),lwd=2)
+acf(residuals(fit), 28,main="ACF with LR",panel.first=grid(25,25))
+```
+
+Figure 5, first plot, shows the TS fitted with a Linear Regression, this is showing a decreasing trend. In the other half of the figure, e can see the residual pattern showing an interesting um and donwn movement, or simmilar to seasonal, remanising of what the lag scatterplots showed. 
+
+Finally in the ACF of the residuals it's showing what could be reffered to a  beautiful seadonality, thus also related to the lag scatterplots from before.
+
+## C)
+
+Eliminate the trend by fitting a kernel smooter with respect to *t* to the time series (choose a reasonable bandwidth yourself so the fit looks reasonable). Analyze the residual pattern and the sample ACF of the residuals and compare it to the ACF from step b). Conclusions? Do residuals seem to represent a stationary series?
+
+
+```{r, echo = FALSE, purl = TRUE, eval = FALSE}
+kernelSmooth<-ksmooth(time(rhine_ts), rhine_ts, "normal", bandwidth=0.2)
+
+col5<-sample(pal,1)
+
+png(filename="images/plotts04.png", width = 750, height = 500)
+plot.ts(rhine_ts,col=col5,
+        main="TS with Kernel Smooth",panel.first=grid(25,25),lwd=2)
+lines(kernelSmooth,col="red",lwd=2,lty=2)
+legend(130,7, legend=c("TS Rhine", "KS"),
+       col=c(col5, "red"), lty=1, cex=0.8,
+       text.font=4, bg='white',lwd=2)
+dev.off()
+res<-(rhine_ts-kernelSmooth$y)
+
+png(filename="images/plotts05.png", width = 750, height = 500)
+par(mfrow=c(1,2))
+plot(res,main="Detrended Rhine\n with KS",col=sample(pal,1),
+     panel.first=grid(15,25),lwd=2)
+acf(res,12,main="ACF with KS",panel.first=grid(25,25))
+dev.off()
+```
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Analisys of the TS with a smoothing kernel at the left and its residuals analisys.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts04.png", "images/plotts05.png"))
+```
+
+Figure 6 has both the visual result of what the Kernel smooth does to the TS data. The smoother in a way, tries to reduce $w$, white noise, thus its expected that the  seasonality before observed in the data with a linear regression will also be less present. The ressiduals do seem to represent the behavior closer to a stationary series.
+
+## D)
+
+Eliminate the trend by fitting the following so-called seasonal means model:
+$$x_t=\alpha_0+\alpha_1t+\beta_1I(month=2)+...+\beta_12I(month=12)+w_t$$
+where $I(x)=1$ if $x$ is true and 0 otherwise. Fitting of this model will require you to augument data with a categorical variable shoing the current month, and then fitting a usual linear regression. Analyze the residual plattern and the ACT of residuals.
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+
+new_rhine<-cbind(rhine,month_enc=c("January","February","March","April","May","June","July","August",
+                                   "September","October","November","December"))
+new_rhine$month_enc<-as.factor(new_rhine$month_enc)
+#str(new_rhine)
+
+seasonal.means<-lm(TotN_conc~month_enc+Time,data=new_rhine)
+
+# plot(seasonal.means$)
+# 
+# png(filename="images/plotts06.png", width = 750, height = 500)
+# # par(mfrow=c(1,2))
+# plot(seasonal.means$residuals,main="Detrended Rhine\n with Seasonal Mean",col=sample(pal,1),
+#      panel.first=grid(15,25),lwd=2,type = "l")
+# dev.off()
+# png(filename="images/plotts07.png", width = 750, height = 500)
+# acf(seasonal.means$residuals,12,main="ACF with Seasonal Means",panel.first=grid(25,25))
+# dev.off()
+```
+
+
+Following this method, in figure 7,we can see that in the detrended plot with seasonal mean the seasonal behavior is little bit more vissible but still not quite there. Although the ACF does show a more understandable seasonality with the lag unit being a montth.
+
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Time series after trend elimination ith a seasonal means sodel.}", out.extra='angle= 0'}
+knitr::include_graphics(c("images/plotts06.png", "images/plotts07.png"))
+```
+
+## E)
+
+Perform stepwise variable selection in model from step d). Which model gives you the lower AIC value? Which variables are left in the model?
+
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+temp <- step(seasonal.means,direction = "both",trace = 0, steps = 1)
+temp$anova$AIC
+# summary(temp)
+
+library(MASS)
+temp1<-stepAIC(seasonal.means,direction = "both")
+temp1$anova$AIC
+```
+
+
+Accoding to the shown results both seem to perform equally well with the same respective AIC score.

@@ -1,0 +1,131 @@
+---
+header-includes: |
+  \usepackage{float}
+  \usepackage{wrapfig}
+  \usepackage{fancyhdr}
+  \usepackage{lastpage}
+  \usepackage{afterpage}
+  \usepackage{fvextra}
+  \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+output:
+  pdf_document:
+    highlight: tango
+    dev: png
+    fig_caption: yes
+    number_sections: yes
+    extra_dependencies: ["eso-pic","graphicx","transparent", "floatflt", "listings", "lipsum"]
+      
+---
+\definecolor{darkblue}{RGB}{38,50,90}
+
+<!-- Full document text watermark -->
+<!-- \AddToShipoutPictureFG{ -->
+<!--   \AtPageCenter{% or \AtTextCenter -->
+<!--     \makebox[0pt]{\rotatebox[origin=c]{45}{% -->
+<!--     \scalebox{10}{\texttransparent{0.2}{DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT }}% -->
+<!--     }} -->
+<!--   } -->
+<!-- } -->
+
+
+<!-- Full document image watermark -->
+<!-- \AddToShipoutPictureFG{ -->
+<!--         \put(-200,-25){ -->
+<!--         \parbox[b][\paperheight]{\paperwidth}{% -->
+<!--             \vfill -->
+<!--             \centering{ -->
+<!--             \transparent{0.05}\includegraphics[angle=45,width=2\textwidth]{images/pepe.PNG} -->
+<!--             }% -->
+<!--             \vfill -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+
+
+
+
+
+
+<!-- Setup for all the codechunks -->
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+library(ggplot2)
+# only use when knitting tables in to png
+# library(kableExtra)
+color_palette <- c(rgb(38,50,72,alpha=160, max = 255),  # [1] MX robots blue
+                   rgb(255,152,0,alpha=160, max = 255), # [2] MX robots orange
+                   rgb(255,0,0,alpha=100, max = 255),   # [3] Red faded
+                   rgb(0,0,0,alpha=160, max = 255),     # [4] black
+                   rgb(10,150,10,alpha=160, max = 255), # [5] green
+                   rgb(0,0,0,alpha=40, max = 255),      # [6] light Gray
+                   rgb(255,0,0,alpha=255, max = 255),   # [7] Red full
+                   rgb(255,152,0,alpha=200, max = 255)) # [8] MX robots orange fulish
+set.seed(12345)
+```
+
+<!-- dump the code for the apendix -->
+
+
+<!-- Prepare title info -->
+```{r titles, include=FALSE, echo=FALSE}
+Title <- "Time Series"
+Subtitle <- "Computer Lab A"
+Author <- "Andreas Charitos(andch552),Ruben Muñoz (rubmu773)"
+Date <- Sys.Date()
+Chapter01 <- "Computations with simulate data"
+Chapter02 <- "Visualization, detrending and residuals analysis of Rhine data"
+Chapter03 <- "Analisys of oil and gas time series"
+```
+<!-- To keep a simple main page -->
+\pagestyle{empty}
+
+<!-- Start main page -->
+\noindent\null\vspace{2 cm}
+
+\noindent\hrulefill{\hrule height 0.6pt}\null\vspace{-0.2 cm}
+
+\begin{center}
+
+\Huge{\bf `r Title`}\vspace{.5 cm}
+
+\LARGE{`r Subtitle`}\vspace{0 cm}
+
+\normalsize{\textit{`r Author`}}\vspace{0 cm}
+
+\normalsize{\textit{`r Date`}}\vspace{-0.5 cm}
+
+\end{center}
+ 
+\noindent\hrulefill{\hrule height 0.6pt}\null\vspace{2 cm}
+
+\tableofcontents
+
+\newpage
+<!-- line is very touchy with spaces before and after -->
+
+<!-- Style for the rest of the document -->
+\pagestyle{fancy}
+\fancyhead[LH]{\textsc{`r Title`}}
+\fancyfoot[LF]{\textsl{`r Subtitle`}}
+
+\fancyfoot[CF]{\thepage\ of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+<!-- \twocolumn -->
+
+```{r child='01.Rmd'}
+```
+
+\newpage
+
+ ```{r child='02.Rmd'}
+ ```
+\newpage
+
+ ```{r child='03.Rmd'}
+ ```
+
+\newpage
+
+```{r child='apendix.Rmd'}
+```

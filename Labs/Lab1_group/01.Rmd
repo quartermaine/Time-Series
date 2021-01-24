@@ -1,0 +1,98 @@
+# `r Chapter01`
+
+## A)
+
+Generate two time series $x_t = -0.8x_{t-2}+w_t$ where $x_0 = x_1 = 0$ and $x_t=cos(\frac{2\pi t}{5})$with 100 observations each. Apply a smoothing filter $v_t = 0.2(x_t+x_{t-1}+x_{t-2}+x_{t-3}+x_{t-4})$ to these two series and compare how the filter has affected them.
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(ggfortify)
+# autoplot(USAccDeaths)
+library(forecast)
+
+set.seed(54321)
+
+require(RColorBrewer)
+pal<-brewer.pal(9,"Paired")
+
+xt=arima.sim(list(order=c(2,0,0),ar=c(0,-0.8)),n=100,start.innov=c(0,0),n.start=2)
+
+t<-1:100
+cs=cos( (2*pi*t)/5 )
+```
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+# apply the filter 
+
+f_coefs=rep(0.2,5)
+xt_filtered=filter(xt,filter=f_coefs,sides=1)
+cs_filtered=filter(cs,filter = f_coefs,sides=1)
+
+col1<-sample(pal,1)
+col2<-sample(pal,1)
+
+```
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Comparation of ACF plots.}", out.extra='angle= 0'}
+plot.ts(xt,col=col1,lwd=2,main=expression("x"[t]*"=-0.8x"[t-2]*"+w"[t]),
+        panel.first=grid(25,25))
+lines(xt_filtered)
+plot.ts(cs,col=col2,lwd=2,main=expression("x"[t]*"=cos(2"*pi*"t/5)"),
+        panel.first=grid(25,25))
+lines(cs_filtered)
+```
+
+## B)
+
+Consider time series $x_t-4x_{t-1}+2x_{t-2}+x_{t-5}=w_t+3w_{t-2}+w_{t-4}-4w_{t-6}$. Write an appropiate R code to investigate whether this time series is casual and invertible.
+
+```{r, echo = FALSE, purl = TRUE, eval = TRUE}
+check_causality<-function(z){
+  return(sqrt(Re(z)^2+Im(z)^2 ))
+}
+
+inv_caus_func<-function(AR_operator,MA_operator){
+  n1<-length(AR_operator)-1
+  n2<-length(MA_operator)-1
+  
+  res<-polyroot(AR_operator)
+  res2<-polyroot(MA_operator)
+  casuality<-sapply(res,function(y){check_causality(y)})
+  #print(casuality>1)
+  invert<-sapply(res2,function(y){check_causality(y)})
+  #print(invert>1)
+  #print(sum(casuality>1))
+  #print(sum(invert>1))
+  if( (sum(casuality>1)==n1) & (sum(invert>1)==n2) ){
+    print("The series is invertible and casual")
+  }else if(sum(casuality>1)==n1 ){
+    print("The series is casal only!")
+  }else if( sum(invert>1)==n2){
+    print("The series is invertible only !")
+  }else{
+    print("Not casual or invertible ")
+  }
+}
+
+ar_operator= c(1,-4,2,0,0,1) ; ma_operator= c(1,0,3,0,1,0,-1)
+inv_caus_func(ar_operator,ma_operator)
+
+```
+
+
+## C)
+
+Use built-in R funcitons to simulate 100 observations from the process $x_t+\frac{3}{4}x_{t-1}=w_t-\frac{1}{9}w_{t-2}$, compute sample ACF and theoretical ACF, use seed 54321. Compare the ACF plots.
+
+```{r, echo = FALSE, warning=FALSE, purl = FALSE, out.width="49%", fig.pos = "h", fig.align = "center", fig.show="hold", fig.cap = "\\textit{Comparation of ACF plots.}", out.extra='angle= 0'}
+# knitr::include_graphics(c("images/plot01.png", "images/plot02.png"))
+sim.ts<-arima.sim(model = list(order = c(1, 0, 2), ar=-3/4 ,ma=c(0,-1/9) ), n = 100)
+
+plot.ts(sim.ts)
+acf(sim.ts,main="ACF Plot",panel.first=grid(25,25),col=sample(pal,1),
+    lwd=2)
+```
+
+
+
+

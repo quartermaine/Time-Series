@@ -1,0 +1,4 @@
+#Dump 1
+
+```{r d1, code = readLines(knitr::purl(input = "~/Courses/Advanced ML/Labs/Lab1/Lab1_AML.Rmd", output = "~/Courses/Advanced ML/Labs/Lab1/temp.R", documentation = 0)), eval = FALSE, tidy=TRUE, tidy.opts = list(blank = FALSE, width.cutoff = 55)}
+```

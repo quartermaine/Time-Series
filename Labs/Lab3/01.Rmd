@@ -1,0 +1,11 @@
+# `r Chapter01`
+
+* The lab is assumed to be done in groups.
+* Create a report to the lab solutions in PDF.
+* Be concise and do not include unnecessary printouts and figures produced by the software and not
+required in the assignments.
+* **Include all your codes as an appendix into your report.**
+* A typical lab report should 2-4 pages of text plus some number of figures plus appendix with codes.
+* The group lab report should be submitted via LISAM before the deadline specified in LISAM.
+* \textcolor{red}{Use 12345 as a random seed everywhere where the result of the simulation differs with the run unless stated otherwise.}
+
